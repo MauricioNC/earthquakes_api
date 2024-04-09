@@ -1,2 +1,3 @@
 class Feature < ApplicationRecord
+  
 end
