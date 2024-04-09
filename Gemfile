@@ -47,3 +47,5 @@ end
 
 
 gem "dotenv", "~> 3.1"
+
+gem "faraday", "~> 2.9"
