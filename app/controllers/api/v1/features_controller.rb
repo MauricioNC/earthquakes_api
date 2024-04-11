@@ -1,6 +1,9 @@
 require 'json'
 class Api::V1::FeaturesController < ApplicationController
+  before_action :set_params
   include Pagy::Backend
+
+  MAGTYPE_FILTERS = ["md", "ml", "ms", "mw", "me", "mi", "mb", "mlg"]
 
   def index
     if Feature.count > 0
@@ -10,16 +13,28 @@ class Api::V1::FeaturesController < ApplicationController
       fetch_and_save_features
     end
 
-    page = params[:page] || Pagy::DEFAULT[:page]
-    per_page = params[:per_page] || Pagy::DEFAULT[:items]
-
-    pagy, features = pagy(Feature.all, page: page, items: per_page)
-    features = prepare_response(features, pagy, page)
-
-    render json: features
+    @mag_type.nil? ? send_normal_response : send_filterd_response
   end
 
   private
+
+  def send_filterd_response
+    response = {}
+
+    if MAGTYPE_FILTERS.include?(@mag_type) && !@mag_type.nil?
+      pagy, features = pagy(Feature.where(magType: @mag_type), page: @page, items: @per_page)
+      response = prepare_response(features, pagy, @page)
+    else
+      response = { error: "mag_type '#{@mag_type}' is not valid filter" }
+    end
+
+    render json: response
+  end
+
+  def send_normal_response
+    pagy, features = pagy(Feature.all, page: @page, items: @per_page)
+    render json: prepare_response(features, pagy, @page)
+  end
 
   def fetch_and_save_features(last_feature = nil)
     response = Faraday.get('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson')
@@ -88,5 +103,11 @@ class Api::V1::FeaturesController < ApplicationController
       data_response.push(feature)
     end
     data_response
+  end
+
+  def set_params
+    @page = params[:page] || Pagy::DEFAULT[:page]
+    @per_page = params[:per_page] || Pagy::DEFAULT[:items]
+    @mag_type = params[:mag_type]
   end
 end
