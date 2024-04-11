@@ -10,21 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_08_232559) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_10_194751) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "features", force: :cascade do |t|
-    t.integer "external_id"
+    t.string "external_id"
     t.integer "magnitude"
     t.string "place", null: false
     t.datetime "time", precision: nil
     t.string "url", null: false
-    t.integer "tusunami"
+    t.integer "tsunami"
     t.string "magType", null: false
     t.string "title", null: false
-    t.decimal "longitud", null: false
-    t.decimal "latitud", null: false
+    t.decimal "longitude", null: false
+    t.decimal "latitude", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
