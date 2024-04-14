@@ -13,7 +13,7 @@ class Api::V1::FeaturesController < ApplicationController
       fetch_and_save_features
     end
 
-    @mag_type.nil? ? send_normal_response : send_filterd_response
+    @mag_type.nil? || @mag_type.empty? ? send_normal_response : send_filterd_response
   end
 
   private
@@ -97,7 +97,8 @@ class Api::V1::FeaturesController < ApplicationController
         pagination: {
           current_page: pagy.page,
           total: pagy.count,
-          per_page: pagy.items
+          per_page: pagy.items,
+          last_page: pagy.last
         }
       }
       data_response.push(feature)
