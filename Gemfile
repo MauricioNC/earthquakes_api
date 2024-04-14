@@ -51,3 +51,7 @@ gem "dotenv", "~> 3.1"
 gem "faraday", "~> 2.9"
 
 gem "pagy", "~> 8.1"
+
+gem "dockerfile-rails", ">= 1.6", :group => :development
+
+gem "rack-cors", "~> 2.0"
