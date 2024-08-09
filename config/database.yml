@@ -1,13 +1,13 @@
 default: &default
   adapter: postgresql
   encoding: unicode
+  username: <%= ENV["DB_USERNAME"] %>
+  password: <%= ENV["DB_PASSWORD"] %>
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: <%= ENV['USERNAME'] %>
-  password: <%= ENV['PASSWORD'] %>
 
 development:
   <<: *default
-  database: earthquakes_api_development
+  database: <%= ENV["DB_NAME"] %>
 
 test:
   <<: *default
@@ -15,7 +15,7 @@ test:
 
 production:
   <<: *default
-  database: <%= ENV['DBNAME']%>
-  username: <%= ENV['DBUSERNAME']%>
-  password: <%= ENV['DBPASSWORD'] %>
-  url: <%= ENV['DBURL'] %>
+  database: <%= ENV["DB_NAME_PROD"]%>
+  username: <%= ENV["DB_USERNAME_PROD"]%>
+  password: <%= ENV["DB_PASSWORD_PROD"] %>
+  url: <%= ENV['DB_URL_PROD'] %>
